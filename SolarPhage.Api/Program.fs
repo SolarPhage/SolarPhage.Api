@@ -35,7 +35,7 @@ let main args =
         configure configureWebHost
 
         endpoints [            
-            get "/" (Response.ofPlainText "Hello world")
+            get "/" (Response.ofPlainText "actions test")
         ]
     }
     0
