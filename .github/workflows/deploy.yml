@@ -8,7 +8,6 @@
 # You can also reference a tag or branch, but the action may change without warning.
 
 name: Build and deploy to Azure Kubernetes Service
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
 env:
   AZURE_CONTAINER_REGISTRY: solarphage # set this to the name of your container registry
@@ -61,7 +60,7 @@ jobs:
       id: bake
 
     - name: Deploys application
-    - uses: Azure/k8s-deploy@c8fbd76ededaad2799c054a9fd5d0fa5d4e9aee4
+      uses: Azure/k8s-deploy@c8fbd76ededaad2799c054a9fd5d0fa5d4e9aee4
       with:
         manifests: ${{ steps.bake.outputs.manifestsBundle }}
         images: |
