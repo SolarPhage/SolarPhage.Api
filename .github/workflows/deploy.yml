@@ -16,8 +16,8 @@ env:
   CLUSTER_NAME: solarphage              # set this to the name of your AKS cluster
   REGISTRY_URL: solarphage.azurecr.io              # set this to the URL of your registry
   # If you bake using helm:
-  CHART_PATH: .helm/solar
-  CHART_OVERRIDE_PATH: .helm/solar
+  CHART_PATH: .helm/solar/Chart.yaml
+  CHART_OVERRIDE_PATH: .helm/solar/Chart.yaml
 
 on: [push]
 
