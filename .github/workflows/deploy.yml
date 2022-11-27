@@ -16,8 +16,8 @@ env:
   CLUSTER_NAME: solarphage              # set this to the name of your AKS cluster
   REGISTRY_URL: solarphage.azurecr.io              # set this to the URL of your registry
   # If you bake using helm:
-  CHART_PATH: MY_HELM_FILE                   # set this to the path to your helm file
-  CHART_OVERRIDE_PATH: MY_OVERRIDE_FILES     # set this to an array of override file paths
+  CHART_PATH: .helm/chart.yml                   # set this to the path to your helm file
+  CHART_OVERRIDE_PATH: [.helm/chart.yml]     # set this to an array of override file paths
 
 on: [push]
 
