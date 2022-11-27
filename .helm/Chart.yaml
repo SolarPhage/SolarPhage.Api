@@ -1,4 +1,8 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: helm-deployed
+apiVersion: v2
+name: solarphage-api-ns
+version: 0.1.0
+appVersion: 0.0.1
+description: A simple example of a chart.  It solely deploys a namespace.
+keywords:
+  - namespace
+  - simple
