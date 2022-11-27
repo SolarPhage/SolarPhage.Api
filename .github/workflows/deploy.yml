@@ -51,6 +51,7 @@ jobs:
       uses: azure/k8s-bake@773b6144a3732e3bf4c78b146a0bb9617b2e016b
       with:
         renderEngine: 'helm'
+        silent: 'false'
         helmChart: ${{ env.CHART_PATH }}
         overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
         overrides: |     
