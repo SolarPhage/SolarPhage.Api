@@ -48,7 +48,7 @@ jobs:
       id: login
 
     - name: Update values
-      run: helm upgrade solar-api solar --set image.tag=${{ github.sha }}
+      run: helm upgrade solar-api ${{ CHART_PATH }} --set image.tag=${{ github.sha }}
 
     - name: Configure deployment
       uses: azure/k8s-bake@v2.2
