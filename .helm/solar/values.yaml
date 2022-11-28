@@ -8,7 +8,7 @@ image:
   repository: solarphage.azurecr.io/solar-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "218249e1ca6c016e88df899848e57f702d9b24ed"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
