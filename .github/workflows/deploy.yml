@@ -16,8 +16,8 @@ env:
   CLUSTER_NAME: solarphage              # set this to the name of your AKS cluster
   REGISTRY_URL: solarphage.azurecr.io              # set this to the URL of your registry
   # If you bake using helm:
-  CHART_PATH: .helm/solar/
-  CHART_OVERRIDE_PATH: .helm/solar/
+  CHART_PATH: ./solar/
+  CHART_OVERRIDE_PATH: ./solar/
 
 on: [push]
 
@@ -48,7 +48,7 @@ jobs:
       id: login
 
     - name: Configure deployment
-      uses: azure/k8s-bake@773b6144a3732e3bf4c78b146a0bb9617b2e016b
+      uses: azure/k8s-bake@v2.2
       with:
         renderEngine: 'helm'
         silent: 'false'
