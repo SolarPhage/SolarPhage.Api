@@ -49,6 +49,7 @@ jobs:
 
     - name: Configure deployment
       uses: azure/k8s-bake@v2.2
+      run: helm upgrade solar-api solar --set image.tag=${{ github.sha }}
       with:
         renderEngine: 'helm'
         silent: 'false'
