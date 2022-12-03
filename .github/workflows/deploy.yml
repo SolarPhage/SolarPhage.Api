@@ -1,20 +1,11 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
+#solarphageapi
 
-# GitHub recommends pinning actions to a commit SHA.
-# To get a newer version, you will need to update the SHA.
-# You can also reference a tag or branch, but the action may change without warning.
-
-name: Build and deploy to Azure Kubernetes Service
+name: Build and deploy to ACR
 
 env:
-  AZURE_CONTAINER_REGISTRY: solarphage # set this to the name of your container registry
   PROJECT_NAME: solarphage-api             # set this to your project's name
-  RESOURCE_GROUP: solarphage_group          # set this to the resource group containing your AKS cluster
-  CLUSTER_NAME: solarphage              # set this to the name of your AKS cluster
-  REGISTRY_URL: solarphage.azurecr.io              # set this to the URL of your registry
+  RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}          # set this to the resource group containing your AKS cluster
+  REGISTRY_URL: ${{ secrets.REGISTRY_LOGIN_SERVER }}              # set this to the URL of your registry
 
 on: [push]
 
@@ -24,20 +15,18 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Azure Login
-      uses: azure/login@v1
+    - uses: azure/docker-login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        login-server: ${{ env.REGISTRY_URL }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
 
-    - name: Build image on ACR
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          az configure --defaults acr=${{ env.AZURE_CONTAINER_REGISTRY }}
-          az acr build -t ${{ env.REGISTRY_URL }}/${{ env.PROJECT_NAME }}:${{ github.sha }} .
+    - run: |
+        docker build -t ${{ env.REGISTRY_URL }}/${{ env.PROJECT_NAME }}:${{ github.sha }} .
+        docker push ${{ env.REGISTRY_URL }}/${{ env.PROJECT_NAME }}:${{ github.sha }}   
 
-    - name: Deploy image
-      uses: azure/CLI@v1
+    - uses: azure/webapps-deploy@v2
       with:
-        inlineScript: |
-          docker push ${{ env.REGISTRY_URL }}/${{ env.PROJECT_NAME }}:${{ github.sha }}
+        app-name: '${{ env.PROJECT_NAME }}'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: ${{ env.REGISTRY_URL }}/${{ env.PROJECT_NAME }}:${{ github.sha }}
