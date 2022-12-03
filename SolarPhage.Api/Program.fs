@@ -26,7 +26,7 @@ let main args =
         fun endpoints webhost -> webhost
                                                                         .ConfigureServices(configureServices)
                                                                         .Configure(configureApp endpoints)
-                                                                        .UseUrls("http://*:9090")
+                                                                        .UseUrls("http://*:80")
 
     webHost [||] {
         use_if    FalcoExtensions.IsDevelopment DeveloperExceptionPageExtensions.UseDeveloperExceptionPage
