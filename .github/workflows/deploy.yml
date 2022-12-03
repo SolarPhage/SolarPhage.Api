@@ -15,9 +15,6 @@ env:
   RESOURCE_GROUP: solarphage_group          # set this to the resource group containing your AKS cluster
   CLUSTER_NAME: solarphage              # set this to the name of your AKS cluster
   REGISTRY_URL: solarphage.azurecr.io              # set this to the URL of your registry
-  # If you bake using helm:
-  CHART_PATH: ./.helm/solar/
-  CHART_OVERRIDE_PATH: ""
 
 on: [push]
 
@@ -28,43 +25,19 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Azure Login
-      uses: azure/login@89d153571fe9a34ed70fcf9f1d95ab8debea7a73
+      uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Build image on ACR
-      uses: azure/CLI@7378ce2ca3c38b4b063feb7a4cbe384fef978055
+      uses: azure/CLI@v1
       with:
         inlineScript: |
           az configure --defaults acr=${{ env.AZURE_CONTAINER_REGISTRY }}
           az acr build -t ${{ env.REGISTRY_URL }}/${{ env.PROJECT_NAME }}:${{ github.sha }} .
-    
-    - name: Gets K8s context
-      uses: azure/aks-set-context@4e5aec273183a197b181314721843e047123d9fa
-      with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          resource-group: ${{ env.RESOURCE_GROUP }}
-          cluster-name: ${{ env.CLUSTER_NAME }}
-      id: login
 
-    - name: Configure deployment
-      uses: azure/k8s-bake@v2.2
+    - name: Deploy image
+      uses: azure/CLI@v1
       with:
-        renderEngine: 'helm'
-        silent: 'false'
-        helmChart: ${{ env.CHART_PATH }}
-        # overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
-        overrides: |     
-          replicas:2
-          image.tag:${{ github.sha }}
-        helm-version: 'latest' 
-      id: bake
-
-    - name: Deploys application
-      uses: Azure/k8s-deploy@c8fbd76ededaad2799c054a9fd5d0fa5d4e9aee4
-      with:
-        manifests: ${{ steps.bake.outputs.manifestsBundle }}
-        images: |
-          ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.PROJECT_NAME }}:${{ github.sha }}
-        imagepullsecrets: |
-          ${{ env.PROJECT_NAME }}
+        inlineScript: |
+          docker push ${{ env.REGISTRY_URL }}/${{ env.PROJECT_NAME }}:${{ github.sha }}
