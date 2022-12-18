@@ -5,10 +5,41 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="appsettings.*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Modules/Item/Types.fs" />
+    <Compile Include="Modules/Character/Types.fs" />
+    <Compile Include="Modules/Character/Controller.fs" />
+    <Compile Include="Modules/Character/Endpoints.fs" />
+    <Compile Include="Modules/Combat/Types.fs" />
+    <Compile Include="Modules/Combat/Controller.fs" />
+    <Compile Include="Modules/Combat/Endpoints.fs" />
+    <Compile Include="Modules/Dungeon/Types.fs" />
+    <Compile Include="Modules/Dungeon/Controller.fs" />
+    <Compile Include="Modules/Dungeon/Endpoints.fs" />
+    <Compile Include="Modules/Game/Types.fs" />
+    <Compile Include="Modules/Game/Controller.fs" />
+    <Compile Include="Modules/Game/Endpoints.fs" />
+    <Compile Include="Modules/Inventory/Types.fs" />
+    <Compile Include="Modules/Inventory/Controller.fs" />
+    <Compile Include="Modules/Inventory/Endpoints.fs" />
+    <Compile Include="Modules/Item/Controller.fs" />
+    <Compile Include="Modules/Item/Endpoints.fs" />
+    <Compile Include="Modules/Shop/Types.fs" />
+    <Compile Include="Modules/Shop/Controller.fs" />
+    <Compile Include="Modules/Shop/Endpoints.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Falco" Version="3.1.*" />
+    <PackageReference Include="Falco" Version="4.0.*" />
   </ItemGroup>
 </Project>
