@@ -1,41 +1,34 @@
-module SolarPhage.Api.Program
+module ConfigurationBuilder.Program
 
 open Falco
 open Falco.Routing
 open Falco.HostBuilder
-open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Hosting
-open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Configuration
+open Microsoft.Extensions.Logging
 
-// ------------
-// Exception Handler
-// ------------
-let exceptionHandler : HttpHandler =
-    Response.withStatusCode 500 
-    >> Response.ofPlainText "Server error"
+/// App configuration, loaded on startup
+let config = configuration [||] {
+    required_json "appsettings.json"
+    optional_json "appsettings.Development.json"
+}
 
-[<EntryPoint>]
-let main args =  
-    let configureServices : IServiceCollection -> unit = 
-        fun services -> services.AddFalco() |> ignore
+let getAllEndpoints = 
+    List.concat [
+        Character.Endpoints.getEndpoints
+        Combat.Endpoints.getEndpoints
+        Dungeon.Endpoints.getEndpoints
+        Game.Endpoints.getEndpoints
+        Item.Endpoints.getEndpoints
+        Shop.Endpoints.getEndpoints
+    ]
 
-    let configureApp : HttpEndpoint list -> IApplicationBuilder -> unit = 
-        fun endpoints app -> app.UseFalco(endpoints) |> ignore
+webHost [||] {
+    logging (fun logging ->
+        logging
+            .ClearProviders()
+            .AddSimpleConsole()
+            .AddConfiguration(config)
+    )
 
-    let configureWebHost : HttpEndpoint list -> IWebHostBuilder -> IWebHostBuilder = 
-        fun endpoints webhost -> webhost
-                                                                        .ConfigureServices(configureServices)
-                                                                        .Configure(configureApp endpoints)
-                                                                        .UseUrls("http://*:80")
-
-    webHost [||] {
-        use_if    FalcoExtensions.IsDevelopment DeveloperExceptionPageExtensions.UseDeveloperExceptionPage
-        use_ifnot FalcoExtensions.IsDevelopment (FalcoExtensions.UseFalcoExceptionHandler exceptionHandler)
-        
-        configure configureWebHost
-
-        endpoints [            
-            get "/" (Response.ofPlainText "actions test.")
-        ]
-    }
-    0
+    endpoints getAllEndpoints
+}
