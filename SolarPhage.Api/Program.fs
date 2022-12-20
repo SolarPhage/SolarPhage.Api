@@ -1,10 +1,9 @@
 module ConfigurationBuilder.Program
 
-open Falco
-open Falco.Routing
 open Falco.HostBuilder
-open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.Logging
+open Microsoft.Extensions.DependencyInjection
+open Microsoft.AspNetCore.Builder
 
 /// App configuration, loaded on startup
 let config = configuration [||] {
@@ -29,6 +28,13 @@ webHost [||] {
             .AddSimpleConsole()
             .AddConfiguration(config)
     )
+
+    add_service (fun svc -> 
+                    svc.AddCors(fun o -> 
+                        o.AddPolicy(name = "solarphage", configurePolicy = fun policy -> 
+                            policy.WithOrigins("*") |> ignore)))
+    
+    use_middleware (fun app -> app.UseCors("solarphage"))
 
     endpoints getAllEndpoints
 }

@@ -3,8 +3,12 @@ module Game.Controller
 open Game.Types
 open Falco
 
+let game = { GameId = 5; MaxFloor = 100}
+
+let games = [ game; game; game; game; game; game; ]
+
 let getAllGames : HttpHandler = 
-    Response.ofJson { GameId = 5; MaxFloor = 100 }
+    Response.ofJson games
 
 let getGame : HttpHandler = 
     Request.mapRoute (fun r -> 
