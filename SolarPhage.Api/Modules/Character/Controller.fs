@@ -3,12 +3,6 @@ module Character.Controller
 open Character.Types
 open Falco
 
-let handleConfigRead : HttpHandler =
-    // Note: colon-separated to access nested values
-    Response.ofJson {|
-        LogLevel = "test"
-        ConnectionString = "test" |}
-
 let inventoryItem = { Item = { Id = 5; Name = "item" }; Count = 5 }
 
 let character = {
