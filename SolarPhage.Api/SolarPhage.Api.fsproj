@@ -17,6 +17,7 @@
   <ItemGroup>
     <Compile Include="Modules/Item/Types.fs" />
     <Compile Include="Modules/Character/Types.fs" />
+    <Compile Include="Modules/Character/Sql.fs" />
     <Compile Include="Modules/Character/Controller.fs" />
     <Compile Include="Modules/Character/Endpoints.fs" />
     <Compile Include="Modules/Combat/Types.fs" />
@@ -41,5 +42,7 @@
   
   <ItemGroup>
     <PackageReference Include="Falco" Version="4.0.*" />
+    <PackageReference Include="Dapper.FSharp" Version="4.2.*" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.*" />
   </ItemGroup>
 </Project>

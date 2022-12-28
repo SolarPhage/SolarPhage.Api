@@ -1,3 +1,3 @@
 module Dungeon.Types
 
-type DungeonInfo = { Level : int }
+type DungeonInfo = { DungeonId: int; Level : int }
