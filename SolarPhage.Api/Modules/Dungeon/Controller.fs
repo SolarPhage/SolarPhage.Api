@@ -1,12 +1,11 @@
 module Dungeon.Controller
-open System
 open Dungeon.Types
 open Falco
 
 let getDungeon : HttpHandler = 
     Request.mapRoute (fun r -> 
         let id = r.GetInt("dungeonId")
-        { Level = id })
+        {  DungeonId = id; Level = id })
         Response.ofJson
 
 let createDungeon : HttpHandler = 

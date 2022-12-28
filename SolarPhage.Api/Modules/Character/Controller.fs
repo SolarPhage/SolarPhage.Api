@@ -1,16 +1,18 @@
 module Character.Controller
 
 open Character.Types
+open Character.Sql
 open Falco
 
 let inventoryItem = { Item = { Id = 5; Name = "item" }; Count = 5 }
 
 let character = {
-    Id = 5
-    Name = "TestName"
-    Level = 5
-    Enabled = true
-    Inventory = [ inventoryItem ]
+    CharacterId = 5
+    UserId = "230598sfljf"
+    // Name = "TestName"
+    // Level = 5
+    // Enabled = true
+    // Inventory = [ inventoryItem ]
 }
 
 let characters = [
@@ -24,9 +26,9 @@ let getAllCharacters : HttpHandler =
 
 let getCharacter : HttpHandler = 
     Request.mapRoute (fun r -> 
-        let id = r.GetInt("id")
-        { Id = id; Name = "query"; Level = 1; Enabled = true; Inventory = [ inventoryItem ] })
-        Response.ofJson
+        let id = r.GetString("id")
+        getCharactersByUserId id)
+        Response.ofJson 
     
 let createCharacter : HttpHandler = 
     let handleOk character : HttpHandler = 
