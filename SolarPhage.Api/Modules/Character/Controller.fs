@@ -32,7 +32,8 @@ let getCharacter : HttpHandler =
     
 let createCharacter : HttpHandler = 
     let handleOk character : HttpHandler = 
-        Response.ofJson character.Name
+        let insert = insertCharacter character
+        Response.ofJson insert
 
     Request.mapJson handleOk
 

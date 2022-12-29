@@ -17,3 +17,11 @@ let getCharactersByUserId (id : string) =
     } |> conn.SelectAsync<CharacterReadSql> 
         |> Async.AwaitTask
         |> Async.RunSynchronously
+
+let insertCharacter (character : CharacterWriteSql) = 
+    insert {
+        into  (table'<CharacterWriteSql> "Characters")
+        value character
+    } |> conn.InsertAsync
+        |> Async.AwaitTask
+        |> Async.RunSynchronously
